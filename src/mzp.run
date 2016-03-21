@@ -1,0 +1,15 @@
+name "IES from Caustics Generator Installer"
+description "Installs IES from Caustics Generator on your system"
+version 1.00
+
+copy "PankovScripts-IESfromCaustics.mcr" to "$userMacros\"
+copy "PankovScripts-IESfromCaustics.ms" to "$userScripts\IESfromCaustics\"
+copy "RenderCaustics_max2012.max" to "$userScripts\IESfromCaustics\"
+copy "RenderCaustics_test_max2012.max" to "$userScripts\IESfromCaustics\"
+
+treecopy "http\*.*" to "$userScripts\IESfromCaustics\"
+
+drop "$userMacros\PankovScripts-IESfromCaustics.mcr"
+run "$userMacros\PankovScripts-IESfromCaustics.mcr"
+
+clear temp on MAX exit
