@@ -1,13 +1,15 @@
 global Pankov_IESfromCaustic_Fltr
-global IESfromCaustic_version = "1.1b"
-global IESfromCaustic_main_rollout
-global IESfromCaustic_webcheck_rollout
+global IESfromCaustics_version = "1.2b"
+global IESfromCaustics_main_rollout
+global IESfromCaustics_webcheck_rollout
+global IESfromCaustics_TmpPath = (getDir #userScripts)+"\\IESfromCaustics\\"
 
 if Pankov_IESfromCaustic_Fltr != undefined then closeRolloutFloater Pankov_IESfromCaustic_Fltr
 
 Pankov_IESfromCaustic_Fltr = newRolloutFloater "IES from caustics generator" 315 440
 
 --( Functions
+--(-- Interface functions
 fn resizeFloater = 
 (
 	local h=Pankov_IESfromCaustic_Fltr.rollouts.count * 30 
@@ -15,6 +17,13 @@ fn resizeFloater =
 		if Pankov_IESfromCaustic_Fltr.rollouts[i].open then h+=Pankov_IESfromCaustic_Fltr.rollouts[i].height)
 	Pankov_IESfromCaustic_Fltr.size = [Pankov_IESfromCaustic_Fltr.size[1],h]
 )
+
+fn wrapString str = (
+	local widthCaracters = 37
+	if str.count>widthCaracters then (return (substring str 1 (widthCaracters/3-3)) + "..." + (substring str (str.count - widthCaracters/3*2+1) (widthCaracters/3*2+3)))
+		else (return str)
+)
+--)-- Interface functions
 
 --( -- Settings INI Functions
 struct controlData (ctrl, data)--, enabled, visible)
@@ -42,8 +51,9 @@ fn rolloutDefsToINI roll fname exclude = (
 )
 
 fn saveDefaultsToINI fname = (
-	setIniSetting fname "IESfromCaustic_Settings" "Version" IESfromCaustic_version
-	rolloutDefsToINI "IESfromCaustic_main_rollout" fname #()
+	setIniSetting fname "IESfromCaustic_Settings" "Version" IESfromCaustics_version
+	setIniSetting fname "IESfromCaustic_Settings" "tempPath" IESfromCaustics_TmpPath
+	rolloutDefsToINI "IESfromCaustics_main_rollout" fname #()
 )
 
 fn rolloutDefsFromINI roll fname exclude = (
@@ -59,48 +69,73 @@ fn loadDefaultsFromINI fname = (
 	local str
 	local exec = true
 	if doesFileExist fname then (
-		data = getIniSetting fname "IESfromCaustic_Settings" "Version" 
-		if data!=IESfromCaustic_version then (
+		data = getIniSetting fname "IESfromCaustic_Settings" "Version"
+		if data!=IESfromCaustics_version then (
 			if data=="" then data="old"
-			if not (querybox ("Current version is "+IESfromCaustic_version+"\nINI file version is "+data+"\n\nDo you still want to load this INI file?") title:"Incompatible version of ini file" ) then exec = false		--"Current version is "+cgportVersion+"\nINI file version is "+data+"\n\nDo you still want to load this INI file?") title:"Incompatible version of ini file"
+			if not (querybox ("Current version is "+IESfromCaustics_version+"\nINI file version is "+data+"\n\nDo you still want to load this INI file?") title:"Incompatible version of ini file" ) then exec = false		--"Current version is "+cgportVersion+"\nINI file version is "+data+"\n\nDo you still want to load this INI file?") title:"Incompatible version of ini file"
 		)
+		data = getIniSetting fname "IESfromCaustic_Settings" "tempPath"
+		if doesfileexist data then (
+			IESfromCaustics_TmpPath = data
+			IESfromCaustics_main_rollout.btnOpenTmpPath.caption = wrapString IESfromCaustics_TmpPath
+		)else(messagebox ("Path doesn't exist \n"+data+"Defaulsts used"))
 		if exec then (
-			rolloutDefsFromINI "IESfromCaustic_main_rollout" fname #()
+			rolloutDefsFromINI "IESfromCaustics_main_rollout" fname #()
 		)
 	)
 ) 
 
+fn slct m = (
+	local s
+	local mat
+	case of (
+		((m == "chrome") and (meditmaterials[22].name=="chrome")) : mat = meditmaterials[22]
+		((m == "sphere") and (meditmaterials[23].name=="White Sphere")) : mat = meditmaterials[23]
+		((m == "glass") and (meditmaterials[24].name=="Caustics_Glass")) : mat = meditmaterials[24]
+		default: return undefined
+	)
+	s = for obj in $* where obj.material == mat collect obj
+	return s
+)
 
 --) -- end Settings INI Functions
 
 fn RenderCaustics = (
 	local p
 	local hided = false
+	local chromeObj = #()
 	if renderscenedialog.isOpen() then (p = true; renderscenedialog.close()) else p = false
-	renderheight = IESfromCaustic_main_rollout.RndrHeightSpin.value
-	renderwidth = IESfromCaustic_main_rollout.RndrWidthSpin.value
+	renderheight = IESfromCaustics_main_rollout.RndrHeightSpin.value
+	renderwidth = IESfromCaustics_main_rollout.RndrWidthSpin.value
 	local bmap = bitmap renderwidth renderheight gamma:1
 		
 	renderers.current.caustics_mode = 0
 	if meditmaterials[24].name == "Caustics_Glass" then (
 		meditmaterials[24].basemtl.texmap_opacity_multiplier = 0 -- turn direct visibility ON (opacity OFF)
-		if IESfromCaustic_main_rollout.chkLeaveGlassShadows.checked then (
+		if IESfromCaustics_main_rollout.chkLeaveGlassShadows.checked then (
 			meditmaterials[24].shadowMtl.texmap_opacity_multiplier = 0   -- turn opacity OFF
 		)else(
 			meditmaterials[24].shadowMtl.texmap_opacity_multiplier = 100   -- turn opacity ON
 		)
 	)
+	renderers.current.options_dontRenderImage = true
 	render camera:cameras[1] outputHDRbitmap:true progressbar:true vfb:false --(not chkRenderOnlyCaustics.checked)
 	
-	renderers.current.saveCausticsPhotonMap ((getDir #userScripts)+"\\IESfromCaustics\\caustics_preview.vrpmap")
+	renderers.current.saveCausticsPhotonMap (IESfromCaustics_TmpPath+"last_IEScaustics_calc.vrpmap")
 	renderers.current.caustics_mode = 1
-	renderers.current.caustics_loadFileName = ((getDir #userScripts)+"\\IESfromCaustics\\caustics_preview.vrpmap")
-	if IESfromCaustic_main_rollout.chkRenderOnlyCaustics.checked then (	hide $Caustic_Light.children; hided = true)
+	renderers.current.caustics_loadFileName = (IESfromCaustics_TmpPath+"last_IEScaustics_calc.vrpmap")
+	if IESfromCaustics_main_rollout.chkRenderOnlyCaustics.checked then (hide $Caustic_Light.children; hided = true)
 	if meditmaterials[24].name == "Caustics_Glass" then meditmaterials[24].basemtl.texmap_opacity_multiplier = 100 -- turn direct visibility OFF (opacity ON)
+	if (meditmaterials[22].name == "chrome") AND (meditmaterials[23].name == "White Sphere") then (
+		chromeObj = slct "chrome"
+		for obj in chromeObj do obj.material = meditmaterials[23]
+	)
+	renderers.current.options_dontRenderImage = false
 	render camera:cameras[1] to:bmap outputHDRbitmap:true progressbar:true
 	
+	if (meditmaterials[22].name == "chrome") AND (meditmaterials[23].name == "White Sphere") then for obj in chromeObj do obj.material = meditmaterials[22]
 	renderers.current.caustics_mode = 0
-	--IESfromCaustic_main_rollout.chkUsePrecalcCaustics.checked = false
+	--IESfromCaustics_main_rollout.chkUsePrecalcCaustics.checked = false
 	if meditmaterials[24].name == "Caustics_Glass" then meditmaterials[24].basemtl.texmap_opacity_multiplier = 0 -- turn direct visibility ON (opacity OFF)
 	if hided then unhide $Caustic_Light.children
 	if meditmaterials[24].name == "Caustics_Glass" then (
@@ -114,9 +149,10 @@ fn RenderCaustics = (
 --) End Functions
 
 
-rollout IESfromCaustic_main_rollout "Script"
+rollout IESfromCaustics_main_rollout "Script"
 (	
 	local LigthMultController=bezier_float()
+	local LightRadiusController=bezier_float()
 	local GlassIorController=bezier_float()
 	local SphereRadiusController=bezier_float()
 	local RecieveCausticsMultController=bezier_float()
@@ -124,25 +160,26 @@ rollout IESfromCaustic_main_rollout "Script"
 	
 	group "Settings" (
 		checkbox chkSaveDefaults "Save last settings on exit" checked:true across:2
-		button btnResetToDefaults "Reset to defaults"
+		button btnResetToDefaults "Reset to defaults" align:#right
+		button btnOpenTmpPath "..userScripts\\IESfromCaustics\\" tooltip:"Open temp path" width:190 align:#left across:2 --offset:[0,5]
+		--editText txtTmpPath "" text:(wrapString IESfromCaustics_TmpPath) width:190 across:2 enabled:false align:#left offset:[-5,0] 
+		button btnSelTmpPath "Sel temp path" align:#right --offset:[0,5]
 	)
 	group "Step1 - Load Scenes (vRay)" (
-		button LoadRenderCausticBtn "Load Render Caustic scene" across:2
-		button btnDeleteExample "Delete example obj"
+		button LoadRenderCausticBtn "Load Render Caustic scene" across:2 align:#left
+		button btnDeleteExample "Delete example obj" align:#right
 		label lbl1 "After loading the scene, merge your fixtures"
 	)
 	group "Step2 - Turn the scene" (
 		label lblStatus "Status: " align:#left
-		--label lbl2 "-------- Fast scene settings: --------"
-		spinner spnSphereRadius "Sphere Radius" range:[1,5000,2] controller:SphereRadiusController --offset:[0,5]
+		spinner spnLightRadius "Light Radius" range:[0.1,10,2] controller:LightRadiusController tooltip:"Use values higher 1.5 and lower 0.2" --offset:[0,5]
 		button btnAssignGlassMat "Glass mat to selected" tooltip:"Glass material to the crystals" across:2
 		button btnAssignChromeMat "Chrome mat selected" tooltip:"Chrome material to reflector"
 		spinner spnGlassIOR "Glass IOR" range:[1,10,2] controller:GlassIorController offset:[0,5] across:2 --align:#left
 		spinner spnReflectIntensity "Reflector (%)" range:[0,100,100] controller:ReflectController offset:[0,5] align:#right --across:2
 		spinner spnLightMut "Light multiplier" range:[0,10000,50] controller:LigthMultController across:2
 		spinner spnCausticsMut "Caustics mult" range:[1,100,1] controller:RecieveCausticsMultController
-		-- checkbox chkCausics "Turn on caustics" align:#right
-		checkbox chkLeaveGlassShadows "Leave glass shadows" align:#center checked:false across:2 offset:[0,5]
+		checkbox chkLeaveGlassShadows "Leave glass shadows" align:#center checked:true across:2 offset:[0,5]
 		checkbox chkRenderOnlyCaustics "Render only caustic" align:#center tooltip:"Without direct lightning"  checked:false offset:[0,5]
 		button btnPreviewRender "PREVIEW RENDER" --tooltip:"Change caustics samples to 2500"
 	)
@@ -151,18 +188,14 @@ rollout IESfromCaustic_main_rollout "Script"
 		editText LumcatTxt "Model" text:"noname" fieldWidth:205 align:#right
 		editText LampTxt "Lamp Type" text:"Galogen" fieldWidth:205 align:#right
 		spinner PowerSpin "Power consumption (Watts)" range:[0.1,1000,40] type:#float
-		spinner LMSpin "Luminous Power (lm)" range:[0.1,1000,10] type:#float
+		spinner LMSpin "Luminous Power (lm)" range:[0.1,1000,350] type:#float
 		spinner SizeSpin "Size (in mm)" range:[0,1000,10] type:#float
 	)
 	group "Step 4 - Resolution" (
 		spinner RndrWidthSpin "Render Width" range:[50,721,361] type:#integer
 		spinner RndrHeightSpin "Render Height" range:[25,361,181] type:#integer
 	)
-	--button btnLoadFinalSet "Load Final settings" tooltip:"Change caustics samples to 7500"
-	--button btnSaveCausctics "[ Step 5 - Pre Calculate Caustics ]" tooltip:"[ optional ] and save to temp folder and turn to saved map" across:2 align:#left
-	--checkbox chkDeletCausticsOnExit "Delete file on exit" offset:[40,5] checked:true
 	group "Final Step" (
-		-- checkbox chkUsePrecalcCaustics "Use precalc caustics" align:#center checked:true
 		button createBtn "Step 5 - Create IES to.."
 	)
 	group "Testing" (
@@ -172,11 +205,13 @@ rollout IESfromCaustic_main_rollout "Script"
 	fn AssignControllers = 
 	(
 		try (
-			SphereRadiusController.value = $IES_Caustics_Catcher.radius
-			$IES_Caustics_Catcher.radius.controller=SphereRadiusController 
-			spnSphereRadius.enabled = true
+			LightRadiusController.value = $VRayLight_Prev.size0
+			$VRayLight_Prev.size0.controller=LightRadiusController
+			$VRayLight_Final.size0.controller=LightRadiusController
+			$Distance_to_light.radius.controller = LightRadiusController
+			spnLightRadius.enabled = true
 		)catch(
-			spnSphereRadius.enabled = false
+			spnLightRadius.enabled = false
 		)
 		
 		try (
@@ -220,12 +255,22 @@ rollout IESfromCaustic_main_rollout "Script"
 		
 	)
 		
+	on btnOpenTmpPath pressed do (
+		ShellLaunch "explorer.exe" ("\""+IESfromCaustics_TmpPath+"\"")	
+	)
+
+	on btnSelTmpPath pressed do (
+		local p = getSavePath caption:"Choose the temp folder" initialDir:IESfromCaustics_TmpPath 
+		if p != undefined then IESfromCaustics_TmpPath=p+"\\"
+		btnOpenTmpPath.caption = wrapString IESfromCaustics_TmpPath
+	)
+	
 	on btnResetToDefaults pressed do (
 		RollPos = Pankov_IESfromCaustic_Fltr.pos
 		if Pankov_IESfromCaustic_Fltr!=undefined then closeRolloutFloater Pankov_IESfromCaustic_Fltr
 		deletefile ((getDir #userScripts)+"\\IESfromCaustics\\defaults.ini")
 		setIniSetting ((getDir #userScripts)+"\\IESfromCaustics\\defaults.ini") "IESfromCaustic_Settings" "WindowPos" (RollPos as string)
-		setIniSetting ((getDir #userScripts)+"\\IESfromCaustics\\defaults.ini") "IESfromCaustic_Settings" "Version" IESfromCaustic_version
+		setIniSetting ((getDir #userScripts)+"\\IESfromCaustics\\defaults.ini") "IESfromCaustic_Settings" "Version" IESfromCaustics_version
 		macros.run "#PankovScripts" "Pankov_IESfromCaustic"
 	)
 	
@@ -301,43 +346,6 @@ rollout IESfromCaustic_main_rollout "Script"
 		RndrWidthSpin.value = val*1.994475138121547
 	)
 	
-	/*
-	on chkUsePrecalcCaustics changed state do (
-		local fname = ((getDir #userScripts)+"\\IESfromCaustics\\caustics.vrpmap")
-		local exec = true
-		if state then (
-			if doesfileexist fname then (
-				if ((getLocalTime())[4] as string) != (filterstring (getFileModDate fname) "/")[2] then (
-					exec = querybox "The file was created in another day. May be that is old file and need to create a new one.\nDo you want to use old file?"
-				)
-				if exec then (
-					renderers.current.caustics_mode = 1
-					renderers.current.caustics_loadFileName = fname
-				) else (chkUsePrecalcCaustics.state = false)
-			) else (
-				messagebox ("File does not exist:\n"+fname)
-				chkUsePrecalcCaustics.state = false
-			)
-		) else (
-			renderers.current.caustics_mode = 0
-		)
-	)
-	*/
-	
-	/*
-	on btnSaveCausctics pressed do (
-		if renderers.current.caustics_on then (
-			LoadFinalSet()
-			renderers.current.caustics_mode = 0
-			render camera:cameras[1] outputHDRbitmap:true progressbar:true
-			renderers.current.saveCausticsPhotonMap ((getDir #userScripts)+"\\IESfromCaustics\\caustics.vrpmap")
-			renderers.current.caustics_mode = 1
-			renderers.current.caustics_loadFileName = ((getDir #userScripts)+"\\IESfromCaustics\\caustics.vrpmap")
-			chkUsePrecalcCaustics.state = true
-		)
-	)	
-	*/
-	
 	on createBtn pressed do (
 		local fname = ""
 		if ManufacTxt.text != "noname" then fName = fName+ManufacTxt.text
@@ -391,31 +399,31 @@ rollout IESfromCaustic_main_rollout "Script"
 		)catch(messagebox "Operation Canceled")
 	)
 	
-	on IESfromCaustic_main_rollout rolledUp state do ( 
+	on IESfromCaustics_main_rollout rolledUp state do ( 
 		resizeFloater()
 	)
 	
-	on IESfromCaustic_main_rollout close do undo off 
+	on IESfromCaustics_main_rollout close do undo off 
 	(
 		RollPos = Pankov_IESfromCaustic_Fltr.pos
-		--if chkDeletCausticsOnExit.state then (
+		/*if chkDeletCausticsOnExit.state then (
 			if doesfileexist ((getDir #userScripts)+"\\IESfromCaustics\\caustics.vrpmap") then 
-				--if querybox "Really delete created caustics file?" then (
+				if querybox "Really delete created caustics file?" then (
 					deletefile ((getDir #userScripts)+"\\IESfromCaustics\\caustics.vrpmap")
-					--chkUsePrecalcCaustics.checked = false
-				--)
-			if doesfileexist ((getDir #userScripts)+"\\IESfromCaustics\\caustics_preview.vrpmap") then 
-				deletefile ((getDir #userScripts)+"\\IESfromCaustics\\caustics_preview.vrpmap")
+					chkUsePrecalcCaustics.checked = false
+				)*/
+			if doesfileexist (IESfromCaustics_TmpPath+"last_IEScaustics_calc.vrpmap") then 
+				deletefile (IESfromCaustics_TmpPath+"last_IEScaustics_calc.vrpmap")
 		--)
 		setIniSetting ((getDir #userScripts)+"\\IESfromCaustics\\defaults.ini") "IESfromCaustic_Settings" "WindowPos" (RollPos as string)
 		if chkSaveDefaults.checked then (
 			saveDefaultsToINI ((getDir #userScripts)+"\\IESfromCaustics\\defaults.ini")
 		) else (
-			setIniSetting ((getDir #userScripts)+"\\IESfromCaustics\\defaults.ini") "IESfromCaustic_main_rollout" "chkSaveDefaults" ("#(#state, "+(chkSaveDefaults.checked as string)+")")
+			setIniSetting ((getDir #userScripts)+"\\IESfromCaustics\\defaults.ini") "IESfromCaustics_main_rollout" "chkSaveDefaults" ("#(#state, "+(chkSaveDefaults.checked as string)+")")
 		)
 	)
 	
-	on IESfromCaustic_main_rollout open do undo off 
+	on IESfromCaustics_main_rollout open do undo off 
 	(
 		try(t=trackviewnodes;
 			n=t[#Anim_Layer_Control_Manager];	deleteTrackViewController t n.controller;
@@ -423,24 +431,24 @@ rollout IESfromCaustic_main_rollout "Script"
 			n=t[#Retimer_Manager];deleteTrackViewController t n.controller;
 			gc();
 		)catch()
+		--txtTmpPath.text =wrapString IESfromCaustics_TmpPath
 		loadDefaultsFromINI ((getDir #userScripts)+"\\IESfromCaustics\\defaults.ini")
 		RollPos = getIniSetting ((getDir #userScripts)+"\\IESfromCaustics\\defaults.ini") "IESfromCaustic_Settings" "WindowPos"
 		if RollPos != "" and RollPos != undefined do (
 			if not keyboard.escPressed do Pankov_IESfromCaustic_Fltr.pos = (execute RollPos)
 		)
 		
-		-- chkCausics.state = renderers.current.caustics_on
 		-- Assign Controllers
 		AssignControllers ()
 	)
 )
 
-rollout IESfromCaustic_webcheck_rollout "About" 
+rollout IESfromCaustics_webcheck_rollout "About" 
 (
 --timer tm interval:100 active:true
 dotNetControl wb "System.Windows.Forms.WebBrowser" width:315 height:113 pos:[0,0] 
 
-	on IESfromCaustic_webcheck_rollout open do
+	on IESfromCaustics_webcheck_rollout open do
 	(
 		Padding 
 		wb.ScrollBarsEnabled =false
@@ -448,15 +456,15 @@ dotNetControl wb "System.Windows.Forms.WebBrowser" width:315 height:113 pos:[0,0
 		wb.Left = -11
 		wb.Top  = -14
 		--wb.AllowNavigation = false
-		IESfromCaustic_webcheck_rollout.height=80
+		IESfromCaustics_webcheck_rollout.height=80
 	)
 
-	on IESfromCaustic_webcheck_rollout rolledUp state do ( 
+	on IESfromCaustics_webcheck_rollout rolledUp state do ( 
 		resizeFloater()
 	)
 	
 )
 
-addRollout IESfromCaustic_webcheck_rollout Pankov_IESfromCaustic_Fltr rolledUp:false
-addRollout IESfromCaustic_main_rollout Pankov_IESfromCaustic_Fltr rolledUp:false
+addRollout IESfromCaustics_webcheck_rollout Pankov_IESfromCaustic_Fltr rolledUp:false
+addRollout IESfromCaustics_main_rollout Pankov_IESfromCaustic_Fltr rolledUp:false
 resizeFloater()
