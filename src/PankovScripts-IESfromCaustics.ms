@@ -1,5 +1,5 @@
 global Pankov_IESfromCaustic_Fltr
-global IESfromCaustics_version = "1.2b-dev"
+global IESfromCaustics_version = "1.2b"
 global IESfromCaustics_main_rollout
 global IESfromCaustics_webcheck_rollout
 global IESfromCaustics_TmpPath = (getDir #userScripts)+"\\IESfromCaustics\\"
@@ -77,7 +77,7 @@ fn loadDefaultsFromINI fname = (
 		data = getIniSetting fname "IESfromCaustic_Settings" "tempPath"
 		if doesfileexist data then (
 			IESfromCaustics_TmpPath = data
-			IESfromCaustics_main_rollout.btnOpenTmpPath.caption = wrapString IESfromCaustics_TmpPath
+			IESfromCaustics_settings_rollout.btnOpenTmpPath.caption = wrapString IESfromCaustics_TmpPath
 		)else(messagebox ("Path doesn't exist \n"+data+"Defaulsts used"))
 		if exec then (
 			rolloutDefsFromINI "IESfromCaustics_main_rollout" fname #()
@@ -158,7 +158,38 @@ fn FormatTime msec = (
 )
 --) End Functions
 
+rollout IESfromCaustics_settings_rollout "Settings"
+(	
+	checkbox chkSaveDefaults "Save last settings on exit" checked:true across:2
+	button btnResetToDefaults "Reset to defaults" align:#right
+	button btnOpenTmpPath "..userScripts\\IESfromCaustics\\" tooltip:"Open temp path" width:190 align:#left across:2 --offset:[0,5]
+	button btnSelTmpPath "Sel temp path" align:#right --offset:[0,5]
 
+	on btnOpenTmpPath pressed do (
+		ShellLaunch "explorer.exe" ("\""+IESfromCaustics_TmpPath+"\"")	
+	)
+
+	on btnSelTmpPath pressed do (
+		local p = getSavePath caption:"Choose the temp folder" initialDir:IESfromCaustics_TmpPath 
+		if p != undefined then IESfromCaustics_TmpPath=p+"\\"
+		btnOpenTmpPath.caption = wrapString IESfromCaustics_TmpPath
+	)
+	
+	on btnResetToDefaults pressed do (
+		RollPos = Pankov_IESfromCaustic_Fltr.pos
+		if Pankov_IESfromCaustic_Fltr!=undefined then closeRolloutFloater Pankov_IESfromCaustic_Fltr
+		deletefile ((getDir #userScripts)+"\\IESfromCaustics\\defaults.ini")
+		setIniSetting ((getDir #userScripts)+"\\IESfromCaustics\\defaults.ini") "IESfromCaustic_Settings" "WindowPos" (RollPos as string)
+		setIniSetting ((getDir #userScripts)+"\\IESfromCaustics\\defaults.ini") "IESfromCaustic_Settings" "Version" IESfromCaustics_version
+		macros.run "#PankovScripts" "Pankov_IESfromCaustic"
+	)
+
+	on IESfromCaustics_settings_rollout rolledUp state do ( 
+		resizeFloater()
+	)
+
+)
+	
 rollout IESfromCaustics_main_rollout "Script"
 (	
 	local LigthMultController=bezier_float()
@@ -168,13 +199,6 @@ rollout IESfromCaustics_main_rollout "Script"
 	local RecieveCausticsMultController=bezier_float()
 	local ReflectController=bezier_float()
 	
-	group "Settings" (
-		checkbox chkSaveDefaults "Save last settings on exit" checked:true across:2
-		button btnResetToDefaults "Reset to defaults" align:#right
-		button btnOpenTmpPath "..userScripts\\IESfromCaustics\\" tooltip:"Open temp path" width:190 align:#left across:2 --offset:[0,5]
-		--editText txtTmpPath "" text:(wrapString IESfromCaustics_TmpPath) width:190 across:2 enabled:false align:#left offset:[-5,0] 
-		button btnSelTmpPath "Sel temp path" align:#right --offset:[0,5]
-	)
 	group "Step1 - Load Scenes (vRay)" (
 		button LoadRenderCausticBtn "Load Render Caustic scene" across:2 align:#left
 		button btnDeleteExample "Delete example obj" align:#right
@@ -265,24 +289,6 @@ rollout IESfromCaustics_main_rollout "Script"
 		
 	)
 		
-	on btnOpenTmpPath pressed do (
-		ShellLaunch "explorer.exe" ("\""+IESfromCaustics_TmpPath+"\"")	
-	)
-
-	on btnSelTmpPath pressed do (
-		local p = getSavePath caption:"Choose the temp folder" initialDir:IESfromCaustics_TmpPath 
-		if p != undefined then IESfromCaustics_TmpPath=p+"\\"
-		btnOpenTmpPath.caption = wrapString IESfromCaustics_TmpPath
-	)
-	
-	on btnResetToDefaults pressed do (
-		RollPos = Pankov_IESfromCaustic_Fltr.pos
-		if Pankov_IESfromCaustic_Fltr!=undefined then closeRolloutFloater Pankov_IESfromCaustic_Fltr
-		deletefile ((getDir #userScripts)+"\\IESfromCaustics\\defaults.ini")
-		setIniSetting ((getDir #userScripts)+"\\IESfromCaustics\\defaults.ini") "IESfromCaustic_Settings" "WindowPos" (RollPos as string)
-		setIniSetting ((getDir #userScripts)+"\\IESfromCaustics\\defaults.ini") "IESfromCaustic_Settings" "Version" IESfromCaustics_version
-		macros.run "#PankovScripts" "Pankov_IESfromCaustic"
-	)
 	
 	on LoadRenderCausticBtn pressed do (
 		loadMaxFile ((getDir #userScripts)+"\\IESfromCaustics\\RenderCaustics_max2012.max") useFileUnits:true
@@ -447,10 +453,10 @@ rollout IESfromCaustics_main_rollout "Script"
 				deletefile (IESfromCaustics_TmpPath+"last_IEScaustics_calc.vrpmap")
 		--)
 		setIniSetting ((getDir #userScripts)+"\\IESfromCaustics\\defaults.ini") "IESfromCaustic_Settings" "WindowPos" (RollPos as string)
-		if chkSaveDefaults.checked then (
+		if IESfromCaustics_settings_rollout.chkSaveDefaults.checked then (
 			saveDefaultsToINI ((getDir #userScripts)+"\\IESfromCaustics\\defaults.ini")
 		) else (
-			setIniSetting ((getDir #userScripts)+"\\IESfromCaustics\\defaults.ini") "IESfromCaustics_main_rollout" "chkSaveDefaults" ("#(#state, "+(chkSaveDefaults.checked as string)+")")
+			setIniSetting ((getDir #userScripts)+"\\IESfromCaustics\\defaults.ini") "IESfromCaustics_main_rollout" "chkSaveDefaults" ("#(#state, "+(IESfromCaustics_settings_rollout.chkSaveDefaults.checked as string)+")")
 		)
 	)
 	
@@ -498,4 +504,5 @@ dotNetControl wb "System.Windows.Forms.WebBrowser" width:315 height:113 pos:[0,0
 
 addRollout IESfromCaustics_webcheck_rollout Pankov_IESfromCaustic_Fltr rolledUp:false
 addRollout IESfromCaustics_main_rollout Pankov_IESfromCaustic_Fltr rolledUp:false
+addRollout IESfromCaustics_settings_rollout Pankov_IESfromCaustic_Fltr rolledUp:false
 resizeFloater()
