@@ -1,5 +1,5 @@
 global Pankov_IESfromCaustic_Fltr
-global IESfromCaustics_version = "1.2b"
+global IESfromCaustics_version = "1.2b-dev"
 global IESfromCaustics_main_rollout
 global IESfromCaustics_webcheck_rollout
 global IESfromCaustics_TmpPath = (getDir #userScripts)+"\\IESfromCaustics\\"
@@ -146,6 +146,16 @@ fn RenderCaustics = (
 	return bmap
 )
 
+fn FormatTime msec = (
+	--h = (msec/3600000) as integer
+	--ss = msec - h * 3600000
+	--m = (ss/60000) as integer
+	--ss -= m * 60000
+	m = (msec/60000) as integer
+	s = ((msec - m * 60000)/1000) as integer
+	--ss = (ss - s*1000) as string
+	return ((m as string) + " min. " + (s as string) + " sec.")  -- + "." + ss)
+)
 --) End Functions
 
 
@@ -178,7 +188,7 @@ rollout IESfromCaustics_main_rollout "Script"
 		spinner spnGlassIOR "Glass IOR" range:[1,10,2] controller:GlassIorController offset:[0,5] across:2 --align:#left
 		spinner spnReflectIntensity "Reflector (%)" range:[0,100,100] controller:ReflectController offset:[0,5] align:#right --across:2
 		spinner spnLightMut "Light multiplier" range:[0,10000,50] controller:LigthMultController across:2
-		spinner spnCausticsMut "Caustics mult" range:[1,100,1] controller:RecieveCausticsMultController
+		spinner spnCausticsMut "Caustics mult" range:[0.01,100,1] controller:RecieveCausticsMultController
 		checkbox chkLeaveGlassShadows "Leave glass shadows" align:#center checked:true across:2 offset:[0,5]
 		checkbox chkRenderOnlyCaustics "Render only caustic" align:#center tooltip:"Without direct lightning"  checked:false offset:[0,5]
 		button btnPreviewRender "PREVIEW RENDER" --tooltip:"Change caustics samples to 2500"
@@ -348,55 +358,76 @@ rollout IESfromCaustics_main_rollout "Script"
 	
 	on createBtn pressed do (
 		local fname = ""
+		local ramIES = stringstream "" -- create RAM file
+		local startTime =timeGetTime()
 		if ManufacTxt.text != "noname" then fName = fName+ManufacTxt.text
 		if LumcatTxt.text != "noname" then fName = fName+"-"+LumcatTxt.text
 		if fname!="" then fname = fname + ".ies"
-		try (newIES = createFile (getSaveFileName caption:"Choose path to save the model" filename:(if fname!="" then fname else "") initialDir:maxfilepath types:"IES File|*.ies|All|*.*")
-			renderheight = RndrHeightSpin.value
-			renderwidth = RndrWidthSpin.value
-			bh = renderheight
-			bw = renderwidth
-			cbitmap = bitmap bw bh gamma:1
-			LoadFinalSet()
-			
-			cbitmap = renderCaustics()
 
-			barray = #()
-			for line = 1 to bh do barray[line] = getPixels cbitmap [0,(line-1)] bw
-			ies_lines = #("")
-			for pix_w = 1 to bw do (
-				ies_lines[pix_w]=(floor(barray[bh][pix_w].red*10)/10) as string
-				for pix_h = 2 to bh do (
-					ies_lines[pix_w]= ies_lines[pix_w]+" "+((floor(barray[bh-pix_h+1][pix_w].red*10)/10) as string)
-				)
-			)
+			fname = getSaveFileName caption:"Choose path to save the model" filename:(if fname!="" then fname else "") initialDir:maxfilepath types:"IES File|*.ies|All|*.*"
+			if fname!= undefined then
+			(
+				renderheight = RndrHeightSpin.value
+				renderwidth = RndrWidthSpin.value
+				bh = renderheight
+				bw = renderwidth
+				cbitmap = bitmap bw bh gamma:1
+				LoadFinalSet()
+				
+				cbitmap = renderCaustics()
 	
-			-- save file
-			--newIES = openFile "C:\\temp\\test1.ies" mode:"r+"
-			step_w = 180.0/(bh-1)
-			step_h = 360.0/(bw-1)
-			local last
-			format ("IESNA:LM-63-1995\n[DATA] "+(substring localtime 1 ((findstring localtime " ") - 1))+
-				"\n[MANUFAC] "+ ManufacTxt.text +
-				"\n[LUMCAT] " + LumcatTxt.text + 
-				"\n[LAMP] " + LampTxt.text +
-				"\nTILT=NONE\n"+
-				"1 " + (LMSpin.value as string) + " 1 "+(bh as string) +" "+ (bw as string) +" 1 2 -"+((SizeSpin.value/1000) as string)+" 0 0\n"+
-				"1 1 "+(PowerSpin.value as string)+"\n") to:newIES
-			
-			for i = 0.0 to 180.0 by step_w do (last = i; format (i as string + " ") to:newIES)
-			--if last<180 then (format "180.0" to:newIES)
-			format "\n" to:newIES
-
-			for i = 0.0 to 360.0 by step_h do (last = i; format (i as string + " ") to:newIES)
-			--if last<360 then (format "360.0" to:newIES)
-			format "\n" to:newIES
-			--for i = 0 to bw-1 do format (i as string + " ") to:newIES
-			--format "\n" to:newIES
-			for i = 1 to bw do format (ies_lines[i] + "\n") to:newIES
-			close newIES
-			messagebox "File write success! :)"
-		)catch(messagebox "Operation Canceled")
+				barray = #()
+				for line = 1 to bh do barray[line] = getPixels cbitmap [0,(line-1)] bw
+				ies_lines = #("")
+				for pix_w = 1 to bw do (
+					ies_lines[pix_w]=(floor(barray[bh][pix_w].red*10)/10) as string
+					for pix_h = 2 to bh do (
+						ies_lines[pix_w]= ies_lines[pix_w]+" "+((floor(barray[bh-pix_h+1][pix_w].red*10)/10) as string)
+					)
+				)
+		
+				-- save file
+				--newIES = openFile "C:\\temp\\test1.ies" mode:"r+"
+				step_w = 180.0/(bh-1)
+				step_h = 360.0/(bw-1)
+				local last
+				format ("IESNA:LM-63-1995\n[DATA] "+(substring localtime 1 ((findstring localtime " ") - 1))+
+					"\n[MANUFAC] "+ ManufacTxt.text +
+					"\n[LUMCAT] " + LumcatTxt.text + 
+					"\n[LAMP] " + LampTxt.text +
+					"\nTILT=NONE\n"+
+					"1 " + (LMSpin.value as string) + " 1 "+(bh as string) +" "+ (bw as string) +" 1 2 -"+((SizeSpin.value/1000) as string)+" 0 0\n"+
+					"1 1 "+(PowerSpin.value as string)+"\n") to:ramIES
+					
+				for i = 0.0 to 180.0 by step_w do (last = i; format (i as string + " ") to:ramIES)
+				--if last<180 then (format "180.0" to:ramIES)
+				format "\n" to:ramIES
+	
+				for i = 0.0 to 360.0 by step_h do (last = i; format (i as string + " ") to:ramIES)
+				--if last<360 then (format "360.0" to:ramIES)
+				format "\n" to:ramIES
+				--for i = 0 to bw-1 do format (i as string + " ") to:ramIES
+				--format "\n" to:ramIES
+				for i = 1 to bw do format (ies_lines[i] + "\n") to:ramIES
+					
+				--try (
+					newIES = createfile (IESfromCaustics_TmpPath + filenameFromPath fname)
+					print ramIES to:newIES
+					close newIES
+					-- move to work dir
+					if doesFileExist fname then (
+						if deleteFile fname then (
+							copyFile (IESfromCaustics_TmpPath + filenameFromPath fname) fname
+							messagebox ("File write success! :)\nRunning time: "+formatTime(timeGetTime() - startTime))
+						) else (messagebox "Can`t overwrite file")
+					) else (
+						copyFile (IESfromCaustics_TmpPath + filenameFromPath fname) fname
+						messagebox ("File write success! :)\nRunning time: " + formatTime (timeGetTime() - startTime))
+					)
+					deleteFile (IESfromCaustics_TmpPath + filenameFromPath fname)
+				--)catch(messagebox "Something is wrong :("; try (close newIES)catch())
+				free ramIES
+			) else (messagebox "Operation Canceled")
 	)
 	
 	on IESfromCaustics_main_rollout rolledUp state do ( 
@@ -452,7 +483,7 @@ dotNetControl wb "System.Windows.Forms.WebBrowser" width:315 height:113 pos:[0,0
 	(
 		Padding 
 		wb.ScrollBarsEnabled =false
-		wb.url = dotNetObject "System.Uri" ((getDir #userScripts)+"\\IESfromCaustics\\http\\scriptlogo.htm")
+		wb.url = dotNetObject "System.Uri" (IESfromCaustics_TmpPath + "http/scriptlogo.htm")
 		wb.Left = -11
 		wb.Top  = -14
 		--wb.AllowNavigation = false
