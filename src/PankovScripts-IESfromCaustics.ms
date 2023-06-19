@@ -214,7 +214,7 @@ rollout IESfromCaustics_main_rollout "Script"
 	)
 	group "Step2 - Turn the scene" (
 		label lblStatus "Status: " align:#left
-		spinner spnLightRadius "Light Radius" range:[0.1,10,2] controller:LightRadiusController tooltip:"Use values higher 1.5 and lower 0.2" --offset:[0,5]
+		spinner spnLightRadius "Light Radius" range:[0.01,50,2] controller:LightRadiusController tooltip:"Use values higher 10 and lower 0.1" --offset:[0,5]
 		button btnAssignGlassMat "Glass mat to selected" tooltip:"Glass material to the crystals" across:2
 		button btnAssignChromeMat "Chrome mat selected" tooltip:"Chrome material to reflector"
 		spinner spnGlassIOR "Glass IOR" range:[1,10,2] controller:GlassIorController offset:[0,5] across:2 --align:#left
