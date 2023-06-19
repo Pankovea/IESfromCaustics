@@ -309,6 +309,14 @@ rollout IESfromCaustics_main_rollout "Script"
 	
 	on LoadRenderTestBtn pressed do (
 		loadMaxFile ((getDir #userScripts)+"\\IESfromCaustics\\RenderCaustics_test_max2012.max") useFileUnits:true
+		lastfname = getIniSetting ((getDir #userScripts)+"\\IESfromCaustics\\defaults.ini") "IESfromCaustic_Settings" "Last_saved_IES"
+		fname = getOpenFileName caption:"Choose IES-file to test" filename:(if lastfname!="" then lastfname else "") initialDir:maxfilepath types:"IES File|*.ies|All|*.*"
+		if fname!= undefined then (
+			$VRayIES001.ies_file = fname
+			max quick render
+		) else (
+			messagebox "Operation Canceled"
+		)
 	)
 	
 	on btnPreviewRender pressed do (
@@ -381,6 +389,8 @@ rollout IESfromCaustics_main_rollout "Script"
 			fname = getSaveFileName caption:"Choose path to save the model" filename:(if fname!="" then fname else "") initialDir:maxfilepath types:"IES File|*.ies|All|*.*"
 			if fname!= undefined then
 			(
+				setIniSetting ((getDir #userScripts)+"\\IESfromCaustics\\defaults.ini") "IESfromCaustic_Settings" "Last_saved_IES" fname
+				
 				renderheight = RndrHeightSpin.value
 				renderwidth = RndrWidthSpin.value
 				bh = renderheight
