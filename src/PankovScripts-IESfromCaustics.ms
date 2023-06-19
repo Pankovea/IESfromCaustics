@@ -188,6 +188,14 @@ rollout IESfromCaustics_settings_rollout "Settings"
 		resizeFloater()
 	)
 
+	on IESfromCaustics_settings_rollout open do (
+		loadDefaultsFromINI ((getDir #userScripts)+"\\IESfromCaustics\\defaults.ini")
+		RollPos = getIniSetting ((getDir #userScripts)+"\\IESfromCaustics\\defaults.ini") "IESfromCaustic_Settings" "WindowPos"
+		if RollPos != "" and RollPos != undefined do (
+			if not keyboard.escPressed do Pankov_IESfromCaustic_Fltr.pos = (execute RollPos)
+		)
+	)
+	
 )
 	
 rollout IESfromCaustics_main_rollout "Script"
@@ -468,12 +476,6 @@ rollout IESfromCaustics_main_rollout "Script"
 			n=t[#Retimer_Manager];deleteTrackViewController t n.controller;
 			gc();
 		)catch()
-		--txtTmpPath.text =wrapString IESfromCaustics_TmpPath
-		loadDefaultsFromINI ((getDir #userScripts)+"\\IESfromCaustics\\defaults.ini")
-		RollPos = getIniSetting ((getDir #userScripts)+"\\IESfromCaustics\\defaults.ini") "IESfromCaustic_Settings" "WindowPos"
-		if RollPos != "" and RollPos != undefined do (
-			if not keyboard.escPressed do Pankov_IESfromCaustic_Fltr.pos = (execute RollPos)
-		)
 		
 		-- Assign Controllers
 		AssignControllers ()
