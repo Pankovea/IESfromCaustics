@@ -1,447 +1,258 @@
-<html xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office"
-    xmlns:w="urn:schemas-microsoft-com:office:word" xmlns:m="http://schemas.microsoft.com/office/2004/12/omml"
-    xmlns="http://www.w3.org/TR/REC-html40">
+<html>
 
 <head>
     <meta http-equiv=Content-Type content="text/html; charset=UTF-8">
-    <meta name=ProgId content=Word.Document>
-    <meta name=Generator content="Microsoft Word 12">
-    <meta name=Originator content="Microsoft Word 12">
-    <link rel=File-List href="help.files/filelist.xml">
-    <link rel=Edit-Time-Data href="help.files/editdata.mso">
-
-    <link rel=dataStoreItem href="help.files/item0031.xml" target="help.files/props0032.xml">
-    <link rel=themeData href="help.files/themedata.thmx">
-    <link rel=colorSchemeMapping href="help.files/colorschememapping.xml">
-
-
 </head>
 
-<body lang=RU link=blue vlink=purple style='tab-interval:35.4pt'>
+<link rel="stylesheet" href="help.files/styles.css">
 
-    <div class=Section1>
+<body lang=RU link=blue vlink=purple>
 
-        <p class=MsoNormal><b style='mso-bidi-font-weight:normal'><span
-                    style='font-size:16.0pt;line-height:115%'>Справка </span></b><b
-                style='mso-bidi-font-weight:normal'><span lang=EN-US style='font-size:16.0pt;
-line-height:115%;mso-ansi-language:EN-US'>IES</span></b><b style='mso-bidi-font-weight:
-normal'><span lang=EN-US style='font-size:16.0pt;line-height:115%'> </span></b><b
-                style='mso-bidi-font-weight:normal'><span lang=EN-US style='font-size:16.0pt;
-line-height:115%;mso-ansi-language:EN-US'>from</span></b><b style='mso-bidi-font-weight:
-normal'><span lang=EN-US style='font-size:16.0pt;line-height:115%'> </span></b><b
-                style='mso-bidi-font-weight:normal'><span lang=EN-US style='font-size:16.0pt;
-line-height:115%;mso-ansi-language:EN-US'>caustics</span></b><b style='mso-bidi-font-weight:normal'><span lang=EN-US
-                    style='font-size:16.0pt;
-line-height:115%'> </span></b><b style='mso-bidi-font-weight:normal'><span lang=EN-US
-                    style='font-size:16.0pt;line-height:115%;mso-ansi-language:EN-US'>generator</span></b><span
-                style='font-size:16.0pt;line-height:115%'> – Генератор </span><span lang=EN-US
-                style='font-size:16.0pt;line-height:115%;mso-ansi-language:EN-US'>IES</span><span
-                style='font-size:16.0pt;line-height:115%'> на основании каустики светильника<o:p></o:p></span></p>
+    <h1>Генератор IES</b> на основании каустики светильника</h1>
+    
+    <h1>Быстрый старт</h1>
 
-        <table class=MsoTableGrid border=0 cellspacing=0 cellpadding=0 width="100%" style='width:100.0%;border-collapse:collapse;border:none;mso-yfti-tbllook:
- 1184;mso-padding-alt:0cm 5.4pt 0cm 5.4pt;mso-border-insideh:none;mso-border-insidev:
- 1.5pt double #E36C0A;mso-border-insidev-themecolor:accent6;mso-border-insidev-themeshade:
- 191'>
-            <tr style='mso-yfti-irow:0;mso-yfti-firstrow:yes;mso-yfti-lastrow:yes'>
-                <td width=0 valign=top style='width:0cm;border:none;border-right:double #E36C0A 1.5pt;
-  mso-border-right-themecolor:accent6;mso-border-right-themeshade:191;
-  padding:0cm 5.4pt 0cm 5.4pt'>
-                    <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt'><span style='font-size:26.0pt;mso-bidi-font-size:11.0pt;line-height:115%;
-  font-family:Wingdings;mso-ascii-font-family:Calibri;mso-ascii-theme-font:
-  minor-latin;mso-hansi-font-family:Calibri;mso-hansi-theme-font:minor-latin;
-  color:#F79646;mso-themecolor:accent6;mso-char-type:symbol;mso-symbol-font-family:
-  Wingdings'><span style='mso-char-type:symbol;mso-symbol-font-family:Wingdings'>G</span></span><span
-                            style='color:#F79646;mso-themecolor:accent6'>
-                            <o:p></o:p>
-                        </span></p>
-                </td>
-                <td valign=top style='border:none;mso-border-left-alt:double #E36C0A 1.5pt;
-  mso-border-left-themecolor:accent6;mso-border-left-themeshade:191;padding:
-  0cm 5.4pt 0cm 5.4pt'>
-                    <p class=MsoNormal>Этим знаком я помечаю важные места. От понимания этих
-                        моменотов зависит работоспособность программы.<o:p></o:p>
-                    </p>
-                </td>
-            </tr>
-        </table>
+    <p>Поcле запуска окно интерфейса выглядит следующим образом:</p>
 
-        <p class=MsoNormal><b style='mso-bidi-font-weight:normal'><span
-                    style='font-size:16.0pt;line-height:115%'>Настройки<o:p></o:p></span></b></p>
+    <table>
+        <tr>
+            <td>
+                <img src="help.files/QuickStart.png">
+            </td>
+            <td valign="top">
+                <ol>
+                    <li>Загрузить сцену</li>
+                    <li>Удалить тестовый светильникё</li>
+                    <li>Добавить свой светильник <b>File -&gt; Import -&gt; Merge</b> и разместить на месте тестового</li>
+                    <li>Выделить в светильнике все стеклянные объекты и нажать на кнопу <b>Glass mat to selected</b></li>
+                    <li>Выделить в светильнике все хромовые объекты и нажать на кнопу <b>Chrome mat to selected</b></li>
+                    <p><b>Остальные элементы светильника, не учавствующие в рассчёте каустики, удалить</b></p>
+                    <li>Выполнить предварительный рендер. Если не нравится результат, то крутить настройки выше</li>
+                    <p>Следующие настройки интуитивно понятны</p>
+                    <li>Можно сохранять IES</li>
+                    <p>Файл сцены пока оставить для последующего редактирования. Открыть новый 3dsmax и</p>
+                    <li>Загрузить сцену для теста полученного IES</li>
+                </ol>
+            </td>
+        </tr>
+    </table>
 
-        <p class=MsoNormal><span>
-                <![if !vml]><img width=301 height=50 src="help.files/image013.jpg" v:shapes="Рисунок_x0020_4">
-                <![endif]>
-            </span></p>
+    <h1>Общая справка</h1>
 
-        <p class=MsoNormal><b style='mso-bidi-font-weight:normal'><span lang=EN-US
-                    style='mso-ansi-language:EN-US'>Save</span><span lang=EN-US> </span></b><b
-                style='mso-bidi-font-weight:normal'><span lang=EN-US style='mso-ansi-language:
-EN-US'>last</span><span lang=EN-US> </span></b><b style='mso-bidi-font-weight:
-normal'><span>settings</span><span lang=EN-US> </span></b><b
-                style='mso-bidi-font-weight:normal'><span>on</span><span
-                    lang=EN-US> </span></b><b style='mso-bidi-font-weight:normal'><span lang=EN-US style='mso-ansi-language:
-EN-US'>exit</span></b><span lang=EN-US> </span>– Сохраняет все значения интерфейса
-            в “<span>defaults</span>.<span lang=EN-US
-                style='mso-ansi-language:EN-US'>ini</span>”<br>
-            <b style='mso-bidi-font-weight:normal'><span lang=EN-US style='mso-ansi-language:
-EN-US'>Reset</span><span lang=EN-US> </span></b><b style='mso-bidi-font-weight:
-normal'><span>to</span><span lang=EN-US> </span></b><b
-                style='mso-bidi-font-weight:normal'><span lang=EN-US
-                    style='mso-ansi-language:EN-US'>defaults</span></b><span lang=EN-US> </span>– Сброс
-            в начальное состояние
-        </p>
+    <table>
+        <td style='border-right:double #E36C0A 1.5pt'>
+            <p><span>G</span></p>
+        </td>
+        <td>
+            <p>Этим знаком я помечаю важные места. От понимания этих
+                моменотов зависит работоспособность программы.
+            </p>
+        </td>
+    </table>
 
-        <p class=MsoNormal><b style='mso-bidi-font-weight:normal'><span
-                    style='font-size:16.0pt;line-height:115%'>Рабочий процесс. ШАГ 1 – Загрузка шаблонной
-                    сцены<o:p></o:p></span></b></p>
+    <h1>Настройки</h1>
 
-        <p class=MsoNormal><b style='mso-bidi-font-weight:normal'><span
-                   >
-                    <![if !vml]><img width=301 height=70 src="help.files/image014.jpg" v:shapes="Рисунок_x0020_7">
-                    <![endif]>
-                    <o:p></o:p>
-                </span></b></p>
+    <p>
+        <img src="help.files/00_Settings.png">
+    </p>
 
-        <p class=MsoNormal>Первой кнопкой загружаем шаблонную сцену. Смотрим как всё
-            устроено:<br>
-            Сцена имеет сферу, для получения каустики, камеру, источник света и тестовый
-            светильник.</p>
+    <p>
+        <b>Save last settings on exit</b> – Сохраняет все значения интерфейса в “defaults.ini”
+        <br>
+        <b>Reset to defaults</b> – Сброс в начальное состояние
+        <br>
+        <b>Кнопка с путём</b> – Открыть временную папку в проводнике
+        <br>
+        <b>Set temp path</b> – Выбрать временную папку.
+        Она используется для хранения настроек и временного хранения данных для рассчёта.
+        Если папка будет храниться в сетевом размещении, то скрипт будет сильно тормозить при сохранении IES файла
+    </p>
 
-        <p class=MsoNormal><span>
-                <![if !vml]><img width=731 height=464 src="help.files/image015.jpg" v:shapes="Рисунок_x0020_10">
-                <![endif]>
-            </span></p>
+    <h1>Рабочий процесс. ШАГ 1 – Загрузка шаблонной сцены</h1>
 
-        <table class=MsoTableGrid border=0 cellspacing=0 cellpadding=0 width="100%" style='width:100.0%;border-collapse:collapse;border:none;mso-yfti-tbllook:
- 1184;mso-padding-alt:0cm 5.4pt 0cm 5.4pt;mso-border-insideh:none;mso-border-insidev:
- 1.5pt double #E36C0A;mso-border-insidev-themecolor:accent6;mso-border-insidev-themeshade:
- 191'>
-            <tr style='mso-yfti-irow:0;mso-yfti-firstrow:yes;mso-yfti-lastrow:yes'>
-                <td valign=top style='border:none;border-right:double #E36C0A 1.5pt;
-  mso-border-right-themecolor:accent6;mso-border-right-themeshade:191;
-  padding:0cm 5.4pt 0cm 5.4pt'>
-                    <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt'><span style='font-size:26.0pt;line-height:115%;font-family:Wingdings;mso-ascii-font-family:
-  Calibri;mso-ascii-theme-font:minor-latin;mso-hansi-font-family:Calibri;
-  mso-hansi-theme-font:minor-latin;color:#F79646;mso-themecolor:accent6;
-  mso-char-type:symbol;mso-symbol-font-family:Wingdings'><span
-                                style='mso-char-type:symbol;mso-symbol-font-family:Wingdings'>G</span></span><span
-                            style='font-size:26.0pt;line-height:115%;color:#F79646;mso-themecolor:accent6'>
-                            <o:p></o:p>
-                        </span></p>
-                </td>
-                <td valign=top style='border:none;mso-border-left-alt:double #E36C0A 1.5pt;
-  mso-border-left-themecolor:accent6;mso-border-left-themeshade:191;padding:
-  0cm 5.4pt 0cm 5.4pt'>
-                    <p class=MsoNormal>Камера расположена приблизительно по середине хрусталей,
-                        таким образом, что бы видно было потолок. На место камеры в будущем
-                        расположим источник света с <span>IES</span>.<br>
-                        Поворот камеры так же важен. Именно с правого края начинается описание <span lang=EN-US
-                            style='mso-ansi-language:EN-US'>IES</span> (с противоположного
-                        взгляду камеры). Таким образом мы сохраним правильную ориентацию бликов.</p>
-                    <p class=MsoNormal>Источник каустики расположен на месте реального источника
-                        света в глубине светильника (над потолком). Он состоит из группы двух <span lang=EN-US
-                            style='mso-ansi-language:EN-US'>VrayLight</span><span lang=EN-US> </span>разным
-                        количеством сэмплов для просчёта каустики: 2500 и 7000. Программа использует
-                        их для предварительного и финального просчёта соответственно.</p>
-                </td>
-            </tr>
-        </table>
+    <p>
+        <img src="help.files/01_Step1_01.png">
+    </p>
 
-        <p class=MsoNormal>Сейчас мы видим, что сфера приплюснута. Это сделано, для
-            того чтобы сымитировать поверхность потолка. Это не очень физически корректно,
-            потому как интенсивность получится выше реальной, но зато более правильно
-            геометрически. В любом случае форма сферы легко восстанавливается отключением
-            модификатора <span>FFD4x4x4<o:p></o:p></span></p>
+    <p>
+        Первой кнопкой загружаем шаблонную сцену. Смотрим как всё устроено:
+    </p>
+    <p>
+        <img src="help.files/01_Step1_04.png">
+    </p>
+    <p>
+        Сцена имеет сглаженный прямоугольник, имитирующий стены, для получения каустики, камеру, источник света и тестовый
+        светильник.
 
-        <p class=MsoNormal><span>
-                <![if !vml]><img width=187 height=186 src="help.files/image016.jpg" v:shapes="Рисунок_x0020_16">
-                <![endif]>
-            </span><span>
-                <o:p></o:p>
-            </span></p>
+    <table>
+        <td style='border-right:double #E36C0A 1.5pt;'>
+            <p><span>G</span></p>
+        </td>
+        <td>
+            <p>Камера расположена приблизительно по середине хрусталей, таким образом,
+                что бы видно было потолок. На место камеры в будущем расположим источник света с IES.
+            </p><p>
+                Поворот камеры так же важен. Именно с правого края начинается описание IES
+                (с противоположного взгляду камеры). Таким образом мы сохраним правильную
+                ориентацию бликов.
+            </p><p>
+                Источник каустики расположен на месте реального источника света в глубине светильника
+                (над потолком). Он состоит из группы двух VrayLight разным количеством сэмплов
+                для просчёта каустики: 1500 и 7000. Программа использует их для предварительного
+                и финального просчёта соответственно.
+            </p>
+        </td>
+    </table>
 
-        <p class=MsoNormal>Модификатор «<span>Make</span><span lang=EN-US>
-            </span><span>hole</span>»
-            - это “<span>Edit</span><span lang=EN-US> </span><span lang=EN-US
-                style='mso-ansi-language:EN-US'>Poly</span>”
-            модификатор, вырезающий отверстие для светильника. При необходимости его тоже
-            отключаем.</p>
+</p><p>
+    Т.к. свет угасает обратно квадрату расстояния, материал сферы компенсирует такое поведение света с помощью карты дистанции.
+</p>
 
-        <p class=MsoNormal>Итак … Добавляем нужный нам светильник в сцену <b style='mso-bidi-font-weight:normal'><span
-                    lang=EN-US style='mso-ansi-language:
-EN-US'>File</span> -&gt; </b><b style='mso-bidi-font-weight:normal'><span lang=EN-US
-                    style='mso-ansi-language:EN-US'>Import</span> -&gt; </b><b style='mso-bidi-font-weight:normal'><span
-                    lang=EN-US style='mso-ansi-language:
-EN-US'>Merge</span></b></p>
+<p>Модификатор «Make hole» - это «Edit Poly» модификатор, вырезающий отверстие для светильника.
+    По умолчанию он выключен, но при необходимости его включаем, чтобы использовать встроенные светильники.</p>
+<p>
+    <img src="help.files/01_Step1_06.png">
+</p>
+    
 
-        <p class=MsoNormal>Располагаем его в центре сферы.</p>
+    <p>Итак … Добавляем нужный нам светильник в сцену <b>File -&gt; Import -&gt; Merge</b></p>
 
-        <p class=MsoListParagraphCxSpFirst style='text-indent:-18.0pt;mso-list:l1 level1 lfo6'>
-            <![if !supportLists]><span style='font-family:Symbol;mso-fareast-font-family:Symbol;mso-bidi-font-family:
-Symbol'><span style='mso-list:Ignore'>·<span
-                        style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    </span></span></span>
-            <![endif]>Если это встройка, то подобным образом как в
-            примере.
-        </p>
+    <p>Располагаем его в центре сферы.</p>
 
-        <p class=MsoListParagraphCxSpMiddle style='text-indent:-18.0pt;mso-list:l1 level1 lfo6'>
-            <![if !supportLists]><span style='font-family:Symbol;mso-fareast-font-family:Symbol;mso-bidi-font-family:
-Symbol'><span style='mso-list:Ignore'>·<span
-                        style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    </span></span></span>
-            <![endif]>Если бра, то поворачиваем сферу плоскостью в
-            бок, имитируя при этом стену.
-        </p>
+    <p>Если это встройка, то подобным образом как в примере.</p>
 
-        <p class=MsoListParagraphCxSpLast style='text-indent:-18.0pt;mso-list:l1 level1 lfo6'>
-            <![if !supportLists]><span style='font-family:Symbol;mso-fareast-font-family:Symbol;mso-bidi-font-family:
-Symbol'><span style='mso-list:Ignore'>·<span
-                        style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    </span></span></span>
-            <![endif]>Если это свес, то убираем приплюснутость и
-            отверстие. А светильник располагаем по центру.
-        </p>
+    <p>Если бра, то размещаем на рассчётном уровне на боковой поверхности</p>
 
-        <p class=MsoNormal>Далее убираем детали, не участвующие в просчёте каустики.
-            Оставляем только хрустали и отражатель.</p>
+    <p>Далее убираем детали, не участвующие в просчёте каустики. Оставляем только хрустали и отражатель.</p>
+    
+    <h1>>ШАГ 2 – Настройка сцены</h1>
 
-        <p class=MsoNormal><b style='mso-bidi-font-weight:normal'><span style='font-size:16.0pt;line-height:115%'>ШАГ 2
-                    – Настройка сцены<o:p></o:p></span></b></p>
+    <p>
+        <img src="help.files/02_Step2.png">
+    </p>
 
-        <p class=MsoNormal><span>
-                <![if !vml]><img width=300 height=188 src="help.files/image017.jpg" v:shapes="Рисунок_x0020_22">
-                <![endif]>
-            </span><span><span style='mso-tab-count:1'> </span>
-                <o:p></o:p>
-            </span></p>
+    <p>В целом эти настройки можно оставить по умолчанию</p>
 
-        <p class=MsoNormal>Настраиваем диаметр сферы (<b style='mso-bidi-font-weight:
-normal'>Sphere Radius</b>). Можно действовать как через интерфейс, так и
-            напрямую в сцене, как удобнее.</p>
+    <p>Выделяем все хрустали и кнопкой <b>Glass mat to selected</b> назначаем материал стекла.<br>
+        Выделяем отражатель и кнопкой <b>Chrome mat to selected</b> назначаем материал отражателя.</p>
 
-        <p class=MsoNormal>Выделяем все хрустали и кнопкой <b style='mso-bidi-font-weight:
-normal'>Glass mat to selected</b> назначаем материал стекла.<br>
-            Выделяем отражатель и кнопкой <b style='mso-bidi-font-weight:normal'><span lang=EN-US
-                    style='mso-ansi-language:EN-US'>Chrome</span> mat to selected</b>
-            назначаем материал отражателя.</p>
+    <table>
+        <td style='border-right:double #E36C0A 1.5pt;'>
+            <p><span>G</span></p>
+        </td>
+        <td style='border:none; padding:0cm 5.4pt 0cm 5.4pt'>
+            <p>Все материалы сцены расположены в редакторе материалов в самом конце. Их перемещать нельзя. Программа активно оперирует значениями этих материалов и обращается к ним по номеру слота.
+            </p><p>
+                <img src="help.files/medit_slots.png">
+            </p>
+        </td>
+    </table>
 
-        <table class=MsoTableGrid border=0 cellspacing=0 cellpadding=0 width="100%" style='width:100.0%;border-collapse:collapse;border:none;mso-yfti-tbllook:
- 1184;mso-padding-alt:0cm 5.4pt 0cm 5.4pt;mso-border-insideh:none;mso-border-insidev:
- 1.5pt double #E36C0A;mso-border-insidev-themecolor:accent6;mso-border-insidev-themeshade:
- 191'>
-            <tr style='mso-yfti-irow:0;mso-yfti-firstrow:yes;mso-yfti-lastrow:yes'>
-                <td width=0 valign=top style='width:0cm;border:none;border-right:double #E36C0A 1.5pt;
-  mso-border-right-themecolor:accent6;mso-border-right-themeshade:191;
-  padding:0cm 5.4pt 0cm 5.4pt'>
-                    <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt'><span style='font-size:26.0pt;mso-bidi-font-size:11.0pt;line-height:115%;
-  font-family:Wingdings;mso-ascii-font-family:Calibri;mso-ascii-theme-font:
-  minor-latin;mso-hansi-font-family:Calibri;mso-hansi-theme-font:minor-latin;
-  color:#F79646;mso-themecolor:accent6;mso-char-type:symbol;mso-symbol-font-family:
-  Wingdings'><span style='mso-char-type:symbol;mso-symbol-font-family:Wingdings'>G</span></span><span
-                            style='color:#F79646;mso-themecolor:accent6'>
-                            <o:p></o:p>
-                        </span></p>
-                </td>
-                <td valign=top style='border:none;mso-border-left-alt:double #E36C0A 1.5pt;
-  mso-border-left-themecolor:accent6;mso-border-left-themeshade:191;padding:
-  0cm 5.4pt 0cm 5.4pt'>
-                    <p class=MsoNormal>Все материалы сцены расположены в редакторе материалов в самом
-                        конце. Их перемещать нельзя. Программа активно оперирует значениями этих
-                        материалов и обращается к ним по номеру слота.</p>
-                    <p class=MsoNormal><span>
-                            <![if !vml]><img width=376 height=279 src="help.files/image018.jpg"
-                                v:shapes="Рисунок_x0020_25">
-                            <![endif]>
-                        </span>
-                        <o:p></o:p>
-                    </p>
-                </td>
-            </tr>
-        </table>
+    <p>Далее можно нажать кнопку <b>PREVIEW REDNER</b>, оценить результат и настроить значения по вкусу:</p>
 
-        <p class=MsoNormal>Далее можно нажать кнопку <span lang=EN-US style='mso-ansi-language:
-EN-US'>Preview</span>, оценить результат и настроить значения по вкусу:</p>
+    <p>
+        <img src="help.files/Preview render.png">
+    </p>
 
-        <p class=MsoNormal><b style='mso-bidi-font-weight:normal'>Glass IOR</b> –
-            изменяет преломление каустики в хрусталях и влияет на рисунок<br>
-            <b style='mso-bidi-font-weight:normal'>Light multiplier</b> – общее количество
-            света<br>
-            <b style='mso-bidi-font-weight:normal'>Reflector (%)</b> – количество
-            отрженного света от отражателя в процентах<br>
-            <b style='mso-bidi-font-weight:normal'>Caustics mult</b> – множитель каустики.
-        </p>
+    <p><b>Light Radius</b>. Этот параметр влияет на чёткость каустики.<br>
+        <b>Glass IOR</b> – изменяет преломление каустики в хрусталях и влияет на рисунок<br>
+        <b>Light multiplier</b> – общее количество света<br>
+        <b>Reflector (%)</b> – количество отрженного света от отражателя в процентах<br>
+        <b>Caustics mult</b> – множитель каустики.
+    </p>
 
-        <p class=MsoNormal>Принцип таков: Сначала убираем <b style='mso-bidi-font-weight:
-normal'>Reflector</b> в ноль, потом настраиваем <b style='mso-bidi-font-weight:
-normal'>Light multiplier</b> <span style='mso-spacerun:yes'> </span>и <b style='mso-bidi-font-weight:normal'>Glass
-                IOR</b>. Параметром <b style='mso-bidi-font-weight:normal'>Caustics mult</b> меняем соотношение
-            прямого света и преломлённого. В<span style='mso-ansi-language:EN-US'> </span>конце<span
-                style='mso-ansi-language:EN-US'> </span>добавляем<span style='mso-ansi-language:
-EN-US'> </span>в<span style='mso-ansi-language:EN-US'> </span>нужной<span style='mso-ansi-language:EN-US'>
-            </span>пропорции<span style='mso-ansi-language:
-EN-US'> <b style='mso-bidi-font-weight:normal'><span lang=EN-US>Reflector</span></b><span lang=EN-US>.<o:p></o:p>
-                    </span></span></p>
+    <p>Принцип таков: Сначала убираем <b>Reflector</b> в ноль, потом настраиваем <b>Light multiplier Glass IOR</b>.
+        Параметром <b>Caustics mult</b> меняем соотношение прямого света и преломлённого. В конце добавляем в нужной
+        пропорции <b>Reflector</b>
+    </p>
 
-        <p class=MsoNormal>Следующие параметры рекомендую не изменять, но
-            поэкспериментировать можно: </p>
+    <p>Следующие параметры рекомендую не изменять, но поэкспериментировать можно: </p>
 
-        <p class=MsoNormal><b style='mso-bidi-font-weight:normal'><span lang=EN-US
-                    style='mso-ansi-language:EN-US'>Leave</span><span lang=EN-US> </span></b><b
-                style='mso-bidi-font-weight:normal'><span lang=EN-US style='mso-ansi-language:
-EN-US'>glass</span><span lang=EN-US> </span></b><b style='mso-bidi-font-weight:
-normal'><span>shadows</span></b><span lang=EN-US> </span>– оставляет
-            отбрасывание теней хрусталями<br>
-            <b style='mso-bidi-font-weight:normal'><span lang=EN-US style='mso-ansi-language:
-EN-US'>Render</span><span lang=EN-US> </span></b><b style='mso-bidi-font-weight:
-normal'><span>only</span><span lang=EN-US> </span></b><b
-                style='mso-bidi-font-weight:normal'><span lang=EN-US
-                    style='mso-ansi-language:EN-US'>caustic</span></b><span lang=EN-US> </span>– убирает
-            прямое освещение
-        </p>
+    <p><b>Leave glass shadows</b> – оставляет отбрасывание теней хрусталями<br>
+        <b>Render only caustic</b> – убирает прямое освещение<br>
+    </p>
 
-        <p class=MsoNormal><b style='mso-bidi-font-weight:normal'><span style='font-size:16.0pt;line-height:115%'>ШАГ 3
-                    – Дополнительные данные
-                    светильника<o:p></o:p></span></b></p>
+    <h1>ШАГ 3 – Дополнительные данные светильника</h1>
 
-        <p class=MsoNormal><span>
-                <![if !vml]><img width=300 height=154 src="help.files/image020.jpg" v:shapes="Рисунок_x0020_28">
-                <![endif]>
-            </span></p>
+    <p>
+        <img src="help.files/03_Step3.png">
+    </p>
 
-        <p class=MsoNormal>Здесь берём спецификацию светильника и вписываем
-            производителя, модель, тип лампы, мощность лампы, световой поток и размер
-            источника света.</p>
+    <p>Здесь берём спецификацию светильника и вписываем
+        производителя, модель, тип лампы, мощность лампы, световой поток и размер
+        источника света. Это матаданные, не влияющие на визуализацию светильника.</p>
 
-        <p class=MsoNormal>2 параметра влияющих на корректную визуализацию светильника
-            в будущем:</p>
+    <p>2 параметра влияющих на корректную визуализацию светильника
+        в будущем:</p>
 
-        <p class=MsoListParagraphCxSpFirst style='text-indent:-18.0pt;mso-list:l1 level1 lfo6'>
-            <![if !supportLists]><span style='font-family:Symbol;mso-fareast-font-family:Symbol;mso-bidi-font-family:
-Symbol'><span style='mso-list:Ignore'>·<span
-                        style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    </span></span></span>
-            <![endif]>световой поток - влияет на количество света
+    <ul>
+        <li>
+            световой поток - влияет на количество света
             даваемого источником света. Указан в спецификации к лампочке. Можно взять из
             таблицы на <a href="https://ru.wikipedia.org/wiki/%D0%9B%D1%8E%D0%BC%D0%B5%D0%BD">википедии</a>
             столбец «Световой поток (лм)».
-        </p>
-
-        <p class=MsoListParagraphCxSpLast style='text-indent:-18.0pt;mso-list:l1 level1 lfo6'>
-            <![if !supportLists]><span style='font-family:Symbol;mso-fareast-font-family:Symbol;mso-bidi-font-family:
-Symbol'><span style='mso-list:Ignore'>·<span
-                        style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    </span></span></span>
-            <![endif]>размер источника света (диаметр) – влияет на
+        </li>
+        <li>
+            размер источника света (диаметр) – влияет на
             размытость теней. Размер стоит взять приблизительно равным размеру отражателя
             или, при его отсутствии, размеру лампочки.
-        </p>
+        </li>
+    </ul>
 
-        <p class=MsoNormal><b style='mso-bidi-font-weight:normal'><span style='font-size:16.0pt;line-height:115%'>ШАГ 4
-                    - Разрешение<o:p></o:p></span></b></p>
+    <h1>ШАГ 4 - Разрешение</h1>
 
-        <p class=MsoNormal><span>
-                <![if !vml]><img border=0 width=300 height=69 src="help.files/image022.jpg" v:shapes="Рисунок_x0020_31">
-                <![endif]>
-            </span></p>
+    <p>
+        <img src="help.files/04_Step4.png">
+    </p>
 
-        <table class=MsoTableGrid border=0 cellspacing=0 cellpadding=0 width="100%" style='width:100.0%;border-collapse:collapse;border:none;mso-yfti-tbllook:
- 1184;mso-padding-alt:0cm 5.4pt 0cm 5.4pt;mso-border-insideh:none;mso-border-insidev:
- 1.5pt double #E36C0A;mso-border-insidev-themecolor:accent6;mso-border-insidev-themeshade:
- 191'>
-            <tr style='mso-yfti-irow:0;mso-yfti-firstrow:yes;mso-yfti-lastrow:yes'>
-                <td width=0 valign=top style='width:0cm;border:none;border-right:double #E36C0A 1.5pt;
-  mso-border-right-themecolor:accent6;mso-border-right-themeshade:191;
-  padding:0cm 5.4pt 0cm 5.4pt'>
-                    <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt'><span style='font-size:26.0pt;mso-bidi-font-size:11.0pt;line-height:115%;
-  font-family:Wingdings;mso-ascii-font-family:Calibri;mso-ascii-theme-font:
-  minor-latin;mso-hansi-font-family:Calibri;mso-hansi-theme-font:minor-latin;
-  color:#F79646;mso-themecolor:accent6;mso-char-type:symbol;mso-symbol-font-family:
-  Wingdings'><span style='mso-char-type:symbol;mso-symbol-font-family:Wingdings'>G</span></span><span
-                            style='color:#F79646;mso-themecolor:accent6'>
-                            <o:p></o:p>
-                        </span></p>
-                </td>
-                <td valign=top style='border:none;mso-border-left-alt:double #E36C0A 1.5pt;
-  mso-border-left-themecolor:accent6;mso-border-left-themeshade:191;padding:
-  0cm 5.4pt 0cm 5.4pt'>
-                    <p class=MsoNormal>В большинстве случаев значения по умолчанию достаточно. Увеличение
-                        этого параметра может сильно затормозить работу со светильниками, использующими
-                        полученный файл <span>IES</span>. Если
-                        необходимо разместить в сцене большое количество разных <span lang=EN-US
-                            style='mso-ansi-language:EN-US'>IES</span>, то возможно стоит понизить этот
-                        параметр.<o:p></o:p>
-                    </p>
-                </td>
-            </tr>
-        </table>
+    <table>
+        <tr>
+            <td style='border-right:double #E36C0A 1.5pt;'>
+                <p><span style='font-size:26pt;font-family:Wingdings;color:#F79646;'>G</span></p>
+            </td>
+            <td style='border:none; padding:0cm 5.4pt 0cm 5.4pt'>
+                <p>В большинстве случаев значения по умолчанию достаточно. Увеличение
+                    этого параметра может сильно затормозить работу со светильниками, использующими
+                    полученный файл IES. Если необходимо разместить в сцене большое количество 
+                    разных IES, то возможно стоит понизить этот параметр.
+                </p>
+            </td>
+        </tr>
+    </table>
 
-        <p class=MsoNormal>Значения полей привязаны в соотношении 2:1, как на сферической
-            развёртке.</p>
+    <p>Значения полей привязаны в соотношении 2:1, как на сферической
+        развёртке.</p>
 
-        <p class=MsoNormal>По умолчанию задан шаг детализации в 1 градус по широте и 1
-            по долготе.</p>
+    <p>По умолчанию задан шаг детализации в 1 градус по широте и 1 по долготе.</p>
+    
+    <h1>ШАГ 5 - Сохранение</h1>
 
-        <p class=MsoNormal><b style='mso-bidi-font-weight:normal'><span style='font-size:16.0pt;line-height:115%'>ШАГ 5
-                    – Сохранение </span></b><b style='mso-bidi-font-weight:normal'><span lang=EN-US style='font-size:16.0pt;
-line-height:115%;mso-ansi-language:EN-US'>IES<o:p></o:p></span></b></p>
+    <p>
+        <img src="help.files/05_Step5.png">
+    </p>
 
-        <p class=MsoNormal><b style='mso-bidi-font-weight:normal'><span style='font-size:16.0pt;line-height:115%;mso-fareast-language:RU;mso-no-proof:
-yes'>
-                    <![if !vml]><img border=0 width=302 height=52 src="help.files/image024.jpg"
-                        v:shapes="Рисунок_x0020_43">
-                    <![endif]>
-                </span></b><b style='mso-bidi-font-weight:normal'><span style='font-size:16.0pt;line-height:
-115%'>
-                    <o:p></o:p>
-                </span></b></p>
+    <p>Перед началом программа спросит имя файла и путь сохранения.</p>
 
-        <p class=MsoNormal>Перед началом программа спросит имя файла и путь сохранения.
-            Не рекомендую указывать сетевые пути. Программа подвисает.</p>
+    <h1>ШАГ 6 - Тестирование</h1>
 
-        <p class=MsoNormal><b style='mso-bidi-font-weight:normal'><span style='font-size:16.0pt;line-height:115%'>ШАГ
-                </span></b><b style='mso-bidi-font-weight:
-normal'><span lang=EN-US style='font-size:16.0pt;line-height:115%;mso-ansi-language:
-EN-US'>6</span></b><b style='mso-bidi-font-weight:normal'><span lang=EN-US style='font-size:16.0pt;line-height:115%'>
-                </span></b><b style='mso-bidi-font-weight:
-normal'><span style='font-size:16.0pt;line-height:115%'>– Тестирование</span></b><b
-                style='mso-bidi-font-weight:normal'><span lang=EN-US style='font-size:16.0pt;
-line-height:115%;mso-ansi-language:EN-US'>
-                    <o:p></o:p>
-                </span></b></p>
-
-        <p class=MsoNormal><span>
-                <![if !vml]><img border=0 width=302 height=52 src="help.files/image026.jpg" v:shapes="Рисунок_x0020_46">
-                <![endif]>
-            </span></p>
-
-        <p class=MsoNormal>Эта кнопка загрузит сцену для тестирования полученного <span lang=EN-US
-                style='mso-ansi-language:EN-US'>IES</span>. Перед нажатием кнопки
-            рекомендую сохранить текущую сцену в новый файл (не перезаписывайте исходную
-            сцену!)</p>
-
-        <p class=MsoNormal><span>
-                <![if !vml]><img border=0 width=462 height=466 src="help.files/image028.jpg"
-                    v:shapes="Рисунок_x0020_49">
-                <![endif]>
-            </span></p>
-
-        <p class=MsoNormal>Выделяем источник света. В параметрах указываем на
-            полученный файл. И жмём <span>F9.<o:p></o:p></span></p>
-
-        <p class=MsoNormal><span>
-                <![if !vml]><img border=0 width=600 height=600 src="help.files/image030.jpg"
-                    v:shapes="Рисунок_x0020_52">
-                <![endif]>
-            </span><span>
-                <o:p></o:p>
-            </span></p>
-
-        <p class=MsoNormal><b style='mso-bidi-font-weight:normal'><span
-                    style='font-size:16.0pt;line-height:115%'>Готово!<o:p></o:p></span></b></p>
+    <p>
+        <img src="help.files/06_Step6.png">
+    </p>
 
 
-    </div>
+    <p>Эта кнопка загрузит сцену для тестирования полученного IES. <b>Текущая сцена не сохраняется.</b>
+        Поэтому, перед нажатием кнопки рекомендую сохранить текущую сцену в новый файл
+        (не перезаписывайте исходную сцену!)</p>
+    <p>Программа спросит какой файл тестировать. Автоматически будет выбран последний созданный программой файл.
+        нажимаете открыть. И сцена автоматичеси будет отрендерена. 
+    </p>
+ 
+    <p><img src="help.files/test_render.jpg">
+    </p>
+
+    <p style='font-size:16pt'><b>Готово!</b></p>
+
+    <address> <a href="https://3ddd.ru/users/pankovea">pankovea @ 3ddd.ru</address>
 
 </body>
 

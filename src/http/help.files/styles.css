@@ -1,0 +1,31 @@
+body {
+    padding-left: 10%;
+    padding-right: 5%;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    max-width: 960px;
+    }
+  h1 {
+    font-size:16pt;
+    font-weight: bold;
+    font-family: Helvetica, Geneva, Arial,
+          SunSans-Regular, sans-serif }
+  a:link {
+    color: blue }
+  a:visited {
+    color: purple }
+  address {
+    margin-top: 1em;
+    padding-top: 1em;
+    border-top: thin dotted }
+  td {
+    vertical-align: top;
+    padding: 0 5pt 0 5pt;
+    }
+  span {
+    font-size:26pt;
+    font-family:Wingdings;
+    color:#F79646;
+  }
+  img {
+    max-width: 100% 
+  }
