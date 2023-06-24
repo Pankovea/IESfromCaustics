@@ -5,7 +5,8 @@
 В последствии был написан данный [скрипт](https://3ddd.ru/blog/post/skript_dlia_sozdaniia_ies_dlia_vstroiennykh_svietil_nikov_na_osnovie_sfierichieskoi_proiektsii_kaustiki).
 
 ## Требования
-Для работы скрита необходим установленный 3dsmax + VRay
+* 3dsmax 2012 или выше
+* VRay
 
 ## Установка
 * Скачате файл *.mzp из [install](./install/)
