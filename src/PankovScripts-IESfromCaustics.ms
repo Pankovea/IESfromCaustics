@@ -448,7 +448,7 @@ rollout IESfromCaustics_main_rollout "Script"
 		if IESfromCaustics_settings_rollout.chkSaveDefaults.checked then (
 			saveDefaultsToINI ((getDir #userScripts)+"\\IESfromCaustics\\defaults.ini")
 		) else (
-			setIniSetting ((getDir #userScripts)+"\\IESfromCaustics\\defaults.ini") "IESfromCaustics_main_rollout" "chkSaveDefaults" ("#(#state, "+(IESfromCaustics_settings_rollout.chkSaveDefaults.checked as string)+")")
+			setIniSetting ((getDir #userScripts)+"\\IESfromCaustics\\defaults.ini") "IESfromCaustics_settings_rollout" "chkSaveDefaults" ("#(#state, "+(IESfromCaustics_settings_rollout.chkSaveDefaults.checked as string)+")")
 		)
 	)
 	
