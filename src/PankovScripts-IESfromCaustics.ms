@@ -1,8 +1,10 @@
 global Pankov_IESfromCaustic_Fltr
 global IESfromCaustics_version = "1.2b"
 global IESfromCaustics_main_rollout
+global IESfromCaustics_settings_rollout
 global IESfromCaustics_webcheck_rollout
 global IESfromCaustics_TmpPath = (getDir #userScripts)+"\\IESfromCaustics\\"
+global IESfromCaustics_StartTime
 
 if Pankov_IESfromCaustic_Fltr != undefined then closeRolloutFloater Pankov_IESfromCaustic_Fltr
 
@@ -72,13 +74,14 @@ fn loadDefaultsFromINI fname = (
 		data = getIniSetting fname "IESfromCaustic_Settings" "Version"
 		if data!=IESfromCaustics_version then (
 			if data=="" then data="old"
-			if not (querybox ("Current version is "+IESfromCaustics_version+"\nINI file version is "+data+"\n\nDo you still want to load this INI file?") title:"Incompatible version of ini file" ) then exec = false		--"Current version is "+cgportVersion+"\nINI file version is "+data+"\n\nDo you still want to load this INI file?") title:"Incompatible version of ini file"
+			if not (querybox ("Current version is "+IESfromCaustics_version+"\nINI file version is "+data+"\n\nDo you still want to load this INI file?") title:"Incompatible version of ini file" ) then exec = false
 		)
 		data = getIniSetting fname "IESfromCaustic_Settings" "tempPath"
-		if doesfileexist data then (
-			IESfromCaustics_TmpPath = data
-			IESfromCaustics_settings_rollout.btnOpenTmpPath.caption = wrapString IESfromCaustics_TmpPath
-		)else(messagebox ("Path doesn't exist \n"+data+"Defaulsts used"))
+		if data != undefined then 
+			if doesfileexist data then (
+				IESfromCaustics_TmpPath = data
+				IESfromCaustics_settings_rollout.btnOpenTmpPath.caption = wrapString IESfromCaustics_TmpPath
+			)else(messagebox ("Temp path from ini doesn't exist \n"+data+"Defaulsts used"))
 		if exec then (
 			rolloutDefsFromINI "IESfromCaustics_main_rollout" fname #()
 		)
@@ -183,7 +186,11 @@ rollout IESfromCaustics_settings_rollout "Settings"
 	)
 
 	on IESfromCaustics_settings_rollout open do (
-		loadDefaultsFromINI ((getDir #userScripts)+"\\IESfromCaustics\\defaults.ini")
+		IESfromCaustics_settings_rollout.open = false
+		check_load_defs = execute (getIniSetting ((getDir #userScripts)+"\\IESfromCaustics\\defaults.ini") "IESfromCaustics_settings_rollout" "chkSaveDefaults")
+		if check_load_defs != "" and check_load_defs != undefined then
+			execute ("IESfromCaustics_settings_rollout.chkSaveDefaults."+(check_load_defs[1] as string)+"="+(check_load_defs[2] as string))
+		if chkSaveDefaults.state then loadDefaultsFromINI ((getDir #userScripts)+"\\IESfromCaustics\\defaults.ini")
 		RollPos = getIniSetting ((getDir #userScripts)+"\\IESfromCaustics\\defaults.ini") "IESfromCaustic_Settings" "WindowPos"
 		if RollPos != "" and RollPos != undefined do (
 			if not keyboard.escPressed do Pankov_IESfromCaustic_Fltr.pos = (execute RollPos)
@@ -368,7 +375,7 @@ rollout IESfromCaustics_main_rollout "Script"
 	on createBtn pressed do (
 		local fname = ""
 		local ramIES = stringstream "" -- create RAM file
-		local startTime =timeGetTime()
+		IESfromCaustics_StartTime = timeGetTime()
 		if ManufacTxt.text != "noname" then fName = fName+ManufacTxt.text
 		if LumcatTxt.text != "noname" then fName = fName+"-"+LumcatTxt.text
 		if fname!="" then fname = fname + ".ies"
@@ -424,11 +431,11 @@ rollout IESfromCaustics_main_rollout "Script"
 				if doesFileExist fname then (
 					if deleteFile fname then (
 						copyFile (IESfromCaustics_TmpPath + filenameFromPath fname) fname
-						messagebox ("File write success! :)\nRunning time: "+formatTime(timeGetTime() - startTime))
+						messagebox ("File write success! :)\nRunning time: "+formatTime(timeGetTime() - IESfromCaustics_StartTime))
 					) else (messagebox "Can`t overwrite file")
 				) else (
 					copyFile (IESfromCaustics_TmpPath + filenameFromPath fname) fname
-					messagebox ("File write success! :)\nRunning time: " + formatTime (timeGetTime() - startTime))
+					messagebox ("File write success! :)\nRunning time: " + formatTime (timeGetTime() - IESfromCaustics_StartTime))
 				)
 				deleteFile (IESfromCaustics_TmpPath + filenameFromPath fname)
 				free ramIES
@@ -445,11 +452,9 @@ rollout IESfromCaustics_main_rollout "Script"
 		if doesfileexist (IESfromCaustics_TmpPath+"last_IEScaustics_calc.vrpmap") then 
 			deletefile (IESfromCaustics_TmpPath+"last_IEScaustics_calc.vrpmap")
 		setIniSetting ((getDir #userScripts)+"\\IESfromCaustics\\defaults.ini") "IESfromCaustic_Settings" "WindowPos" (RollPos as string)
-		if IESfromCaustics_settings_rollout.chkSaveDefaults.checked then (
+		setIniSetting ((getDir #userScripts)+"\\IESfromCaustics\\defaults.ini") "IESfromCaustics_settings_rollout" "chkSaveDefaults" ("#(#state, "+(IESfromCaustics_settings_rollout.chkSaveDefaults.checked as string)+")")
+		if IESfromCaustics_settings_rollout.chkSaveDefaults.checked then
 			saveDefaultsToINI ((getDir #userScripts)+"\\IESfromCaustics\\defaults.ini")
-		) else (
-			setIniSetting ((getDir #userScripts)+"\\IESfromCaustics\\defaults.ini") "IESfromCaustics_settings_rollout" "chkSaveDefaults" ("#(#state, "+(IESfromCaustics_settings_rollout.chkSaveDefaults.checked as string)+")")
-		)
 	)
 	
 	on IESfromCaustics_main_rollout open do undo off 
